@@ -25,96 +25,81 @@ class HouseInfoSpider(scrapy.Spider):
     allowed_domains = ['www.trulia.com', 'www.zillow.com']
     start_urls = ['https://www.trulia.com/CA/San_Francisco/']
 
-    def __init__(self):
-
-        print('Enter the city')
-        #x = input()
-        x = 'Ajax'
-
+    def scrape(self, location, trulia):
 
         chrome_options = webdriver.ChromeOptions() 
         chrome_options.add_argument("user-data-dir=C:\\Users\\thana\\AppData\Local\\Google\\Chrome\\User Data\\Default") #Path to your chrome profile
         #driver = webdriver.Chrome(executable_path=PATH, chrome_options=options)
         #chrome_options = Options()
-        #chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless")
 
         #chrome_path = which("chromedriver")
 
         driver = webdriver.Chrome(executable_path='C:/Users/thana/Documents/DS/Dababy/chromedriver.exe', options=chrome_options)
-        #driver = webdriver.Chrome(executable_path = 'C:/Users/thana/Documents/DS/Dababy/chromedriver.exe')
-        #driver.set_window_size(1920, 1080)
 
-        #driver.get("https://www.zillow.com/")
-        driver.get("https://www.zillow.com/homes/"+x+"_rb/")
-        time.sleep(3)
-        """
-        if(not(driver.find_elements_by_xpath("//input[@type='text']"))):
-            print("Please fill out verification")
-            WebDriverWait(driver, 500).until(EC.presence_of_element_located((By.XPATH, "//input[@type='text']")))
-            time.sleep(3)
-
-        driver.find_element_by_xpath("//input[@type='text']").click()
         
+        verification_element = ""
+        next_page_element = ""
+        if (trulia):
+            verification_element = "//select[@aria-label='Sort Results']"
+            next_page_element = "//li[@data-testid='pagination-next-page']"
+            driver.get("https://www.trulia.com/")
 
-        ActionChains(driver) \
-                .send_keys(x) \
-                .key_down(Keys.ENTER) \
-                .key_up(Keys.ENTER) \
-                .perform()
+            if(WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//input[@id='banner-search']")))):
+                print("Please fill out verification")
+                WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "//input[@id='banner-search']")))
+                driver.find_element_by_xpath("//input[@id='banner-search']").click()
 
-        """
 
+            ActionChains(driver) \
+                    .send_keys(location) \
+                    .key_down(Keys.ENTER) \
+                    .key_up(Keys.ENTER) \
+                    .perform()
+        else:  
+            verification_element = "//strong[@id='sort_label']"
+            next_page_element = "//a[(@title='Next page') and not (@tabindex='-1')]"
+            driver.get("https://www.zillow.com/homes/"+location+"_rb/")
+        
         time.sleep(3)
-        if(not(driver.find_elements_by_xpath("//strong[@id='sort_label']"))):
+
+        if(not(driver.find_elements_by_xpath(verification_element))):
             print("Please fill out verification")
-            WebDriverWait(driver, 500).until(EC.presence_of_element_located((By.XPATH, "//strong[@id='sort_label']")))
+            WebDriverWait(driver, 500).until(EC.presence_of_element_located((By.XPATH, verification_element)))
 
         self.html = ''
-        c = 0
-        f = open("rec.txt", "w")
+        self.html += driver.page_source
 
-        while (driver.find_elements_by_xpath("//a[(@title='Next page') and not (@tabindex='-1')]")):
-            c+=1
-            f.write(str(c)+'\n')
-            self.html += driver.page_source
-            driver.find_element_by_xpath("//a[(@title='Next page') and not (@tabindex='-1')]").click()
+        while (driver.find_elements_by_xpath(next_page_element)):
+            driver.find_element_by_xpath(next_page_element).click()
             time.sleep(1)
-
-        f.close()
-
-
-        """
-        driver.get("https://www.trulia.com/")
-
-        if(WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//input[@id='banner-search']")))):
-            print("Please fill out verification")
-            WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, "//input[@id='banner-search']")))
-        driver.find_element_by_xpath("//input[@id='banner-search']").click()
-
-
-        ActionChains(driver) \
-                .send_keys(x) \
-                .key_down(Keys.ENTER) \
-                .key_up(Keys.ENTER) \
-                .perform()
-
-
-        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, "//select[@data-testid='sort-select']")))
-
-        self.html = ''
-        c = 0
-        f = open("rec.txt", "w")
-
-        while (driver.find_elements_by_xpath("//li[@data-testid='pagination-next-page']")):
-            c+=1
-            f.write(str(c)+'\n')
             self.html += driver.page_source
-            driver.find_element_by_xpath("//li[@data-testid='pagination-next-page']").click()
-            time.sleep(3/4)
 
-        f.close()
-        """
         driver.close()
+
+    def __init__(self):
+        country = ''
+        while (country != 'c' and country!='a'):
+            print('Is your location in Canada or America?'+
+                "\nc - Canada"+
+                "\na - America")
+            country = input()
+        
+        print('Enter the city')
+        location = input()
+
+        if country=='c':
+            self.scrape(
+            location = location,
+            trulia = False
+            )
+        else:
+            self.scrape(
+            location = location,
+            trulia = True
+            )
+
+
 
     def parse(self, response):
         resp = Selector(text=self.html)
@@ -146,7 +131,7 @@ class HouseInfoSpider(scrapy.Spider):
             }
 
         for home in resp.xpath("//article[@role='presentation']"):
-
+            link = home.xpath("./div[2]/a").xpath('@href').get()
             address = home.xpath(".//div[1]/a/address/text()").get()
             #town = home.xpath(".//article[@role='presentation']/div[1]/div[2]/div/text()").get()
             price = home.xpath(".//div[1]/div[2]/div/text()").get()
@@ -165,6 +150,7 @@ class HouseInfoSpider(scrapy.Spider):
                 sqft = 'None'
             """
             yield {
+                'link':link,
                 'address': address,
                 'price': price,
                 'bed': bed,
