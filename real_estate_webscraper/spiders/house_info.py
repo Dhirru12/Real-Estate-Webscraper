@@ -18,20 +18,18 @@ from selenium.webdriver.common.keys import Keys
 cd projects/real_estate_webscraper/real-estate-webscraper
 scrapy crawl house_info -o house_info.csv
 
-
 """
 class HouseInfoSpider(scrapy.Spider):
     name = 'house_info'
     allowed_domains = ['www.trulia.com', 'www.zillow.com']
     start_urls = ['https://www.trulia.com/CA/San_Francisco/']
-
     def scrape(self, location, trulia):
 
         chrome_options = webdriver.ChromeOptions() 
         chrome_options.add_argument("user-data-dir=C:\\Users\\thana\\AppData\Local\\Google\\Chrome\\User Data\\Default") #Path to your chrome profile
         #driver = webdriver.Chrome(executable_path=PATH, chrome_options=options)
         #chrome_options = Options()
-        chrome_options.add_argument("--headless")
+        #chrome_options.add_argument("--headless")
 
         #chrome_path = which("chromedriver")
 
@@ -78,24 +76,18 @@ class HouseInfoSpider(scrapy.Spider):
         driver.close()
 
     def __init__(self):
-        country = ''
-        while (country != 'c' and country!='a'):
-            print('Is your location in Canada or America?'+
-                "\nc - Canada"+
-                "\na - America")
-            country = input()
-        
-        print('Enter the city')
-        location = input()
-
+        file1 = open('info.txt', 'r')
+        lines = file1.readlines()
+        country = lines[0].strip()
+        city = lines[1].strip()
         if country=='c':
             self.scrape(
-            location = location,
+            location = city,
             trulia = False
             )
         else:
             self.scrape(
-            location = location,
+            location = city,
             trulia = True
             )
 
