@@ -1,40 +1,45 @@
 # -*- coding: utf-8 -*-
+#Scrapy imports
 import scrapy
-import logging
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from shutil import which
 from scrapy.selector import Selector
+#Selenium Imports
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-import sys
-import time
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-"""
-cd projects/real_estate_webscraper/real-estate-webscraper
-scrapy crawl house_info -o house_info.csv
+#Time import
+import time
 
-"""
+#House info spider class
 class HouseInfoSpider(scrapy.Spider):
+    #Spider info
     name = 'house_info'
     allowed_domains = ['www.trulia.com', 'www.zillow.com']
     start_urls = ['https://www.trulia.com/CA/San_Francisco/']
-    def scrape(self, location, trulia):
 
+    #Init function
+    def __init__(self):
+        #Reads and initializes variables based on what the script.py wrote in info.txt
+        file1 = open('info.txt', 'r')
+        lines = file1.readlines()
+        country = lines[0].strip()
+        location = lines[1].strip()
+
+        #IMPORTANT:
+        #Based on info provided, the spider will use the trulia boolean to look for different html elements
+        if country=='c':
+            trulia = False
+        else:
+            trulia = True
+        #Loads chromedriver with personal chrome profile
         chrome_options = webdriver.ChromeOptions() 
         chrome_options.add_argument("user-data-dir=C:\\Users\\thana\\AppData\Local\\Google\\Chrome\\User Data\\Default") #Path to your chrome profile
-        #driver = webdriver.Chrome(executable_path=PATH, chrome_options=options)
-        #chrome_options = Options()
-        #chrome_options.add_argument("--headless")
-
-        #chrome_path = which("chromedriver")
-
         driver = webdriver.Chrome(executable_path='C:/Users/thana/Documents/DS/Dababy/chromedriver.exe', options=chrome_options)
-
+        
+        #If uncomfortable with loading personal chrome profile, feel free to comment/delete code above and use the code snippet below
+        #driver
         
         verification_element = ""
         next_page_element = ""
@@ -75,28 +80,9 @@ class HouseInfoSpider(scrapy.Spider):
 
         driver.close()
 
-    def __init__(self):
-        file1 = open('info.txt', 'r')
-        lines = file1.readlines()
-        country = lines[0].strip()
-        city = lines[1].strip()
-        if country=='c':
-            self.scrape(
-            location = city,
-            trulia = False
-            )
-        else:
-            self.scrape(
-            location = city,
-            trulia = True
-            )
-
-
 
     def parse(self, response):
         resp = Selector(text=self.html)
-        #homes = response.xpath("//li[starts-with(@data-testid,'srp-home-card')]")
-        #//li[starts-with(@data-testid,'srp-home-card')]/div/div/div/div/div[2]/div/div[1]/div/div
         for home in resp.xpath("//li[starts-with(@data-testid,'srp-home-card')]"):
             address = home.xpath(".//div/div/div/div/div[2]/div/a/div[1]/text()").get()
             town = home.xpath(".//div/div/div/div/div[2]/div/a/div[2]/text()").get()
@@ -135,12 +121,6 @@ class HouseInfoSpider(scrapy.Spider):
                 bathroom = home.xpath(".//div[1]/div[2]/ul/li[2]/text()").extract_first()
             else:
                 bathroom = "None"
-            """
-            if (home.xpath(".//article[@role='presentation']/div[1]/div[2]/div/text()").extract_first()):
-                sqft = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()).split(' ')[0]
-            else:
-                sqft = 'None'
-            """
             yield {
                 'link':link,
                 'address': address,
