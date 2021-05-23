@@ -39,11 +39,13 @@ class HouseInfoSpider(scrapy.Spider):
         driver = webdriver.Chrome(executable_path='C:/Users/thana/Documents/DS/Dababy/chromedriver.exe', options=chrome_options)
         
         #If uncomfortable with loading personal chrome profile, feel free to comment/delete code above and use the code snippet below
-        #driver
+        #webdriver.Chrome(executable_path = 'CHROME_PATH')
         
+        #Create refererence elements so they can be given values within the 
         verification_element = ""
         next_page_element = ""
         if (trulia):
+
             verification_element = "//select[@aria-label='Sort Results']"
             next_page_element = "//li[@data-testid='pagination-next-page']"
             driver.get("https://www.trulia.com/")
@@ -111,7 +113,6 @@ class HouseInfoSpider(scrapy.Spider):
         for home in resp.xpath("//article[@role='presentation']"):
             link = home.xpath("./div[2]/a").xpath('@href').get()
             address = home.xpath(".//div[1]/a/address/text()").get()
-            #town = home.xpath(".//article[@role='presentation']/div[1]/div[2]/div/text()").get()
             price = home.xpath(".//div[1]/div[2]/div/text()").get()
             if (home.xpath(".//div[1]/div[2]/ul/li[1]/text()").extract_first()):
                 bed = home.xpath(".//div[1]/div[2]/ul/li[1]/text()").extract_first()
