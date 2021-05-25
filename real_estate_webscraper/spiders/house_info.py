@@ -37,8 +37,8 @@ class HouseInfoSpider(scrapy.Spider):
             trulia = True
         #Loads chromedriver with personal chrome profile
         chrome_options = webdriver.ChromeOptions() 
-        chrome_options.add_argument("user-data-dir=C:\\Users\\thana\\AppData\Local\\Google\\Chrome\\User Data\\Default") #Path to your chrome profile
-        driver = webdriver.Chrome(executable_path='C:/Users/thana/Documents/DS/Dababy/chromedriver.exe', options=chrome_options)
+        chrome_options.add_argument("CHROME_PROFILE_PATH") #Path to your chrome profile
+        driver = webdriver.Chrome(executable_path='CHROME_PATH', options=chrome_options)
         
         #If uncomfortable with loading personal chrome profile, feel free to comment/delete code above and use the code snippet below
         #webdriver.Chrome(executable_path = 'CHROME_PATH')
