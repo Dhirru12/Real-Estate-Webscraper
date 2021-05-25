@@ -1,5 +1,7 @@
-import scrapy
+#Imports CrawlerProcess
 from scrapy.crawler import CrawlerProcess
+
+#Imports spider from house_info.py
 from house_info import HouseInfoSpider
 
 country = ''
