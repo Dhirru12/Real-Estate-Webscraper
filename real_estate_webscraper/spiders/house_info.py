@@ -14,6 +14,10 @@ from selenium.webdriver.common.keys import Keys
 #Time import
 import time
 
+
+# import xlsxwriter module
+import xlsxwriter
+
 #House info spider class
 class HouseInfoSpider(scrapy.Spider):
     #Spider info
@@ -21,8 +25,11 @@ class HouseInfoSpider(scrapy.Spider):
     allowed_domains = ['www.trulia.com', 'www.zillow.com']
     start_urls = ['https://www.trulia.com/CA/San_Francisco/']
 
+    
+
     #Init function
     def __init__(self):
+
         #Reads and initializes variables based on what the script.py wrote in info.txt
         file1 = open('info.txt', 'r')
         lines = file1.readlines()
@@ -96,68 +103,120 @@ class HouseInfoSpider(scrapy.Spider):
         #After concluding that it has reached the last page, the spider closes the driver
         driver.close()
 
+    def write_excel_line(self,excel_file,row,info):
+        column = 0
+        for item in info: 
+            excel_file.write(row, column, item)
+            column+=1
+
+
     #Method to parse info from html
     def parse(self, response):
 
+        workbook = xlsxwriter.Workbook('House_Info.xlsx')
+        worksheet = workbook.add_worksheet()
+        row = 1
+
         #Initialization of resp variable before parsing
         resp = Selector(text=self.html)
+        if (resp.xpath("//li[starts-with(@data-testid,'srp-home-card')]")):
 
-        #If Trulia was scraped, the spider parses the info from each home card element
-        for home in resp.xpath("//li[starts-with(@data-testid,'srp-home-card')]"):
-            #Gets address of home
-            address = home.xpath(".//div/div/div/div/div[2]/div/a/div[1]/text()").get()
-            #Gets town of home
-            town = home.xpath(".//div/div/div/div/div[2]/div/a/div[2]/text()").get()
-            #Gets price of home
-            price = home.xpath(".//div/div/div/div/div[2]/div/div[1]/div/div/text()").get()
-            #Get bedroom count if the bedroom count is available
-            if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/text()").extract_first()):
-                bed = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/text()").extract_first()).split('b')[0]
-            else:
-                bed = "None"
-            #Gets bathroom count of home if the bathroom count is available
-            if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()):
-                bathroom = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[2]/div/div[2]/div/text()").extract_first()).split('b')[0]
-            else:
-                bathroom = "None"
-            #Gets square feet of home if the square feet is available
-            if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()):
-                sqft = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()).split(' ')[0]
-            else:
-                sqft = 'None'
+            titles = ["Address", "Town","Price", "Bed","Bathroom","Square Feet"]
+            for column in range (len(titles)):
+                worksheet.write(0, column, titles[column])
 
-            #Yields all info collected from the home
-            yield {
-                'address': address,
-                'town': town,
-                'price': price,
-                'bed': bed,
-                'bathroom': bathroom,
-                'sqft':sqft
-            }
+            #If Trulia was scraped, the spider parses the info from each home card element
+            for home in resp.xpath("//li[starts-with(@data-testid,'srp-home-card')]"):
+                #Gets address of home
+                address = home.xpath(".//div/div/div/div/div[2]/div/a/div[1]/text()").get()
+                #Gets town of home
+                town = home.xpath(".//div/div/div/div/div[2]/div/a/div[2]/text()").get()
+                #Gets price of home
+                price = home.xpath(".//div/div/div/div/div[2]/div/div[1]/div/div/text()").get()
+                #Get bedroom count if the bedroom count is available
+                if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/text()").extract_first()):
+                    bed = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/text()").extract_first()).split('b')[0]
+                else:
+                    bed = "None"
+                #Gets bathroom count of home if the bathroom count is available
+                if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()):
+                    bathroom = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[2]/div/div[2]/div/text()").extract_first()).split('b')[0]
+                else:
+                    bathroom = "None"
+                #Gets square feet of home if the square feet is available
+                if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()):
+                    sqft = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()).split(' ')[0]
+                else:
+                    sqft = 'None'
+
+                #Yields all info collected from the home
+                yield {
+                    'address': address,
+                    'town': town,
+                    'price': price,
+                    'bed': bed,
+                    'bathroom': bathroom,
+                    'sqft':sqft
+                }
+                self.write_excel_line(
+                    worksheet,
+                    row,
+                    [
+                        address,
+                        town,
+                        price,
+                        bed,
+                        bathroom,
+                        sqft,
+                    ]
+                )
+                row+=1
+
         #If Zillow was scraped, the spider parses the info from each home card element
-        for home in resp.xpath("//article[@role='presentation']"):
-            #Gets link of home
-            link = home.xpath("./div[2]/a").xpath('@href').get()
-            #Gets address of home
-            address = home.xpath(".//div[1]/a/address/text()").get()
-            #Gets price of home
-            price = home.xpath(".//div[1]/div[2]/div/text()").get()
-            #Gets bedroom count of home if the bedroom count is available
-            if (home.xpath(".//div[1]/div[2]/ul/li[1]/text()").extract_first()):
-                bed = home.xpath(".//div[1]/div[2]/ul/li[1]/text()").extract_first()
-            else:
-                bed = "None"
-            #Gets bathroom count of home if the bathroom count is available
-            if (home.xpath(".//div[1]/div[2]/ul/li[2]/text()").extract_first()):
-                bathroom = home.xpath(".//div[1]/div[2]/ul/li[2]/text()").extract_first()
-            else:
-                bathroom = "None"
-            #Yields all info collected from the home
-            yield {
-                'link':link,
-                'address': address,
-                'price': price,
-                'bed': bed,
-                'bathroom': bathroom,
-            }
+        else:
+            titles = ["Link","Address", "Price", "Bed","Bathroom"]
+            for column in range (len(titles)):
+                worksheet.write(0, column, titles[column])
+
+            for home in resp.xpath("//article[@role='presentation']"):
+                #Gets link of home
+                link = home.xpath("./div[2]/a").xpath('@href').get()
+                #Gets address of home
+                address = home.xpath(".//div[1]/a/address/text()").get()
+                #Gets price of home
+                price = home.xpath(".//div[1]/div[2]/div/text()").get()
+                #Gets bedroom count of home if the bedroom count is available
+                if (home.xpath(".//div[1]/div[2]/ul/li[1]/text()").extract_first()):
+                    bed = home.xpath(".//div[1]/div[2]/ul/li[1]/text()").extract_first()
+                else:
+                    bed = "None"
+                #Gets bathroom count of home if the bathroom count is available
+                if (home.xpath(".//div[1]/div[2]/ul/li[2]/text()").extract_first()):
+                    bathroom = home.xpath(".//div[1]/div[2]/ul/li[2]/text()").extract_first()
+                else:
+                    bathroom = "None"
+                #Yields all info collected from the home
+                yield {
+                    'link':link,
+                    'address':address,
+                    "price":price,
+                    "bed":bed,
+                    "bathroom":bathroom,
+                }
+                self.write_excel_line(
+                    worksheet,
+                    row,
+                    [
+                        link,
+                        address,
+                        price,
+                        bed,
+                        bathroom,
+                    ]
+                )
+                row+=1
+
+        workbook.close()
+
+
+
