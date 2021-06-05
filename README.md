@@ -20,6 +20,23 @@
   </p>
 </p>
 
+<!-- ABOUT THE PROJECT -->
+## What is The Real Estate Webscraper?
+
+<img src="images/Input_example.gif" alt="input_example" width="500" height="281">
+<img src="images/Zillow_Example.gif" alt="scraping_example" width="500" height="281">
+<img src="images/Excel_result_example.gif" alt="excel_example" width="500" height="281">
+
+Instagram leaves constantly astonished with the new features they constanly add, however, they fail to cover niche faetures that don't appeal to the greater demographic. So it's up to creators like me to find the demand and make these features ourselves.
+
+Instagram MuliDM allows multiple users to text as one single account. Despite seeming obscure, the product is volatile and can serve a variety of purposes.
+
+What are some examples?
+* Offers anonymity, intermidiary account protects the identities of the input account(s)
+* Allows any allowed person(s) to view a text conversation through the bot live
+* Can be used for pranks and jokes with friends
+
+
 ### Built With
 * [Selenium](https://www.selenium.dev)
 * [Scrapy](https://scrapy.org/)
