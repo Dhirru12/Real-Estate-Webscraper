@@ -21,11 +21,10 @@
 <!-- ABOUT THE PROJECT -->
 ## What is The Real Estate Webscraper?
 
-<p align="center">
-   <p float="left">
-      <img src="images/Input_example.gif" alt="input_example" width="500" height="281">
-      <img src="images/Zillow_Example.gif" alt="scraping_example" width="500" height="281">
-   </p>
+
+<p float="left" align="center">
+   <img src="images/Input_example.gif" alt="input_example" width="500" height="281">
+   <img src="images/Zillow_Example.gif" alt="scraping_example" width="500" height="281">
    <img src="images/Excel_result_example.gif" alt="excel_example" width="500" height="281">
 </p>
 
