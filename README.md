@@ -5,7 +5,7 @@
 <br />
 <p align="center">
   <a>
-    <img src="images/logo.png" alt="Logo" width="240" height="240">
+    <img src="images/Home Security Logo.png" alt="Logo" width="240" height="240">
   </a>
  
    <p align="center">
