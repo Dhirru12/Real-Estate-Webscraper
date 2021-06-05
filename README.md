@@ -27,21 +27,18 @@ Instagram MuliDM allows multiple users to text as one single account. Despite se
 <p float="left" align="center">
    <p align="center">
    <img src="images/Input_example.gif" alt="input_example" width="500" height="281">
-    <p>
    <em>Inputting location</em>
-   </p>
+
    </p>
    <p align="center">
    <img src="images/Zillow_Example.gif" alt="scraping_example" width="500" height="281">
-     <p>
+
  <em>Bot scraping website</em>
-          </p>
+
    </p> 
    <p align="center">
    <img src="images/Excel_result_example.gif" alt="excel_example" width="500" height="281">
-     <p>
    <em>Bot creates an excel file using data created</em>
-          </p>
    </p>
 </p>
 
