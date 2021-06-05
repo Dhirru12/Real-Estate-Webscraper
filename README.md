@@ -1,6 +1,3 @@
-# Real Estate Webscraper
- Collect the home info anywhere in Canada and America!
- 
  <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -9,6 +6,7 @@
   </a>
  
    <p align="center">
+    Collect the home info anywhere in Canada and America!
     By inputting a country and location, the spider will collect info on all homes in the specified area into a csv file.
     <br />
     <a href="https://github.com/Dhirru12/Real-Estate-Webscraper/blob/main/README.md"><strong>Explore the docs »</strong></a>
@@ -22,9 +20,10 @@
 
 <!-- ABOUT THE PROJECT -->
 ## What is The Real Estate Webscraper?
-
-<img src="images/Input_example.gif" alt="input_example" width="500" height="281">
-<img src="images/Zillow_Example.gif" alt="scraping_example" width="500" height="281">
+<p float="left">
+ <img src="images/Input_example.gif" alt="input_example" width="500" height="281">
+ <img src="images/Zillow_Example.gif" alt="scraping_example" width="500" height="281">
+</p>
 <img src="images/Excel_result_example.gif" alt="excel_example" width="500" height="281">
 
 Instagram leaves constantly astonished with the new features they constanly add, however, they fail to cover niche faetures that don't appeal to the greater demographic. So it's up to creators like me to find the demand and make these features ourselves.
