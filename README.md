@@ -7,6 +7,7 @@
  
    <p align="center">
     Collect the home info anywhere in Canada and America!
+    <br />
     By inputting a country and location, the spider will collect info on all homes in the specified area into a csv file.
     <br />
     <a href="https://github.com/Dhirru12/Real-Estate-Webscraper/blob/main/README.md"><strong>Explore the docs »</strong></a>
@@ -20,9 +21,9 @@
 
 <!-- ABOUT THE PROJECT -->
 ## What is The Real Estate Webscraper?
-Instagram leaves constantly astonished with the new features they constanly add, however, they fail to cover niche faetures that don't appeal to the greater demographic. So it's up to creators like me to find the demand and make these features ourselves.
+The real estate industry is always changing, so I created a bot that records its current conditions for your convienience!
 
-Instagram MuliDM allows multiple users to text as one single account. Despite seeming obscure, the product is volatile and can serve a variety of purposes.
+By simply inputting whether your location is within America or Canada and the location, this bot will scrape all info on all the homes in the area!
 
 <p float="left" align="center">
    <img src="images/Input_example.gif" alt="input_example" width="500" height="281">
@@ -31,10 +32,10 @@ Instagram MuliDM allows multiple users to text as one single account. Despite se
 </p>
 
 
-What are some examples?
-* Offers anonymity, intermidiary account protects the identities of the input account(s)
-* Allows any allowed person(s) to view a text conversation through the bot live
-* Can be used for pranks and jokes with friends
+What can I use this program for?
+* Record current prices of homes in a location
+* Real estate back of the envelope analysis
+* Record homes available for sale
 
 
 ### Built With
