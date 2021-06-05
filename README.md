@@ -8,7 +8,7 @@
    <p align="center">
     Collect the home info anywhere in Canada and America!
     <br />
-    By inputting a country and location, the spider will collect info on all homes in the specified area into a csv file.
+    By inputting a country and location, the spider will collect info on all homes in the specified area into an excel file.
     <br />
     <a href="https://github.com/Dhirru12/Real-Estate-Webscraper/blob/main/README.md"><strong>Explore the docs »</strong></a>
     <br />
