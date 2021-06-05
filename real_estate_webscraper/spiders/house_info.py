@@ -134,18 +134,18 @@ class HouseInfoSpider(scrapy.Spider):
                 #Gets price of home
                 price = home.xpath(".//div/div/div/div/div[2]/div/div[1]/div/div/text()").get()
                 #Get bedroom count if the bedroom count is available
-                if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/text()").extract_first()):
-                    bed = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/text()").extract_first()).split('b')[0]
+                if (home.xpath(".//div/div/div/div/div/div/div[2]/div[1]/div/div/div/text()").extract_first()):
+                    bed = (home.xpath(".//div/div/div/div/div/div/div[2]/div[1]/div/div/div/text()").extract_first()).split('b')[0]
                 else:
                     bed = "None"
                 #Gets bathroom count of home if the bathroom count is available
-                if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()):
-                    bathroom = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[2]/div/div[2]/div/text()").extract_first()).split('b')[0]
+                if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[2]/div/div/div/text()").extract_first()):
+                    bathroom = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[2]/div/div/div/text()").extract_first()).split('b')[0]
                 else:
                     bathroom = "None"
                 #Gets square feet of home if the square feet is available
-                if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()):
-                    sqft = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div/text()").extract_first()).split(' ')[0]
+                if (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div/div/text()").extract_first()):
+                    sqft = (home.xpath(".//div/div/div/div/div[2]/div/div[2]/div[3]/div/div/div/text()").extract_first()).split(' ')[0]
                 else:
                     sqft = 'None'
 

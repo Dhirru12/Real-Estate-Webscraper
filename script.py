@@ -21,7 +21,7 @@ print("-------------------------------------------------------------------------
 while (country != 'c' and country!='a'):
     #Assigns input to country variable
     #country = input()
-    country = "a"
+    country = input()
     #If given incorrect input, user is told their input is incorrect and to give valid input
     if (country != 'c' and country!='a'):
         print("--------------------------------------------------------------------------"+
@@ -29,6 +29,11 @@ while (country != 'c' and country!='a'):
         '\nIs your location in Canada or America?'+
         "\nc - Canada"+
         "\na - America")
+
+#User is asked for the city (functions as the location)
+print('Enter the city')
+#city = input()
+city = input()
 
 #All inputted info is written into text file for spider to read and use
 file1 = open('info.txt', 'w')
