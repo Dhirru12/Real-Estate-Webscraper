@@ -23,7 +23,7 @@
 ## What is The Real Estate Webscraper?
 The real estate industry is always changing, so I created a bot that records its current conditions for your convienience!
 
-By simply inputting whether your location is within America or Canada and the location, this bot will scrape all info on all the homes in the area!
+By simply inputting whether your location is within America or Canada and the location itself, this bot will scrape all info on all the homes in the area!
 
 <p float="left" align="center">
    <img src="images/Input_example.gif" alt="input_example" width="400" height="225">
